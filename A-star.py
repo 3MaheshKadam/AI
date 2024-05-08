@@ -1,61 +1,110 @@
-import heapq
-
-class Node:
-    def __init__(self, state, parent=None, g=0, h=0):
-        self.state = state
-        self.parent = parent
-        self.g = g  # Cost from start node to current node
-        self.h = h  # Heuristic estimate from current node to goal node
-
-    def f(self):
-        return self.g + self.h  # Total estimated cost of the cheapest solution through this node
-
-def astar(start, goal, heuristic):
-    open_set = []
-    closed_set = set()
-
-    heapq.heappush(open_set, (start.f(), start))  # Priority queue ordered by f-score
-    while open_set:
-        _, current_node = heapq.heappop(open_set)
-        
-        if current_node.state == goal:
-            path = []
-            while current_node:
-                path.append(current_node.state)
-                current_node = current_node.parent
-            return path[::-1]  # Return reversed path
-
-        closed_set.add(current_node.state)
-
-        for neighbor in get_neighbors(current_node.state):
-            if neighbor in closed_set:
-                continue
-
-            g_score = current_node.g + 1  # Assuming uniform cost for moving between nodes
-            h_score = heuristic(neighbor, goal)
-            new_node = Node(state=neighbor, parent=current_node, g=g_score, h=h_score)
-
-            # Check if this node is already in open set with a lower f-score
-            in_open_set = any(node.state == new_node.state and node.f() < new_node.f() for _, node in open_set)
-            if not in_open_set:
-                heapq.heappush(open_set, (new_node.f(), new_node))
-
-    return None  # No path found
-
-def get_neighbors(state):
-    # Function to get neighbors of a state in the game
-    pass  # Implement according to the game's rules
-
-def heuristic(state, goal):
-    # Heuristic function estimating cost from state to goal
-    pass  # Implement according to the game's requirements
-
-# Example usage:
-start_state = ...
-goal_state = ...
-start_node = Node(state=start_state)
-path = astar(start_node, goal_state, heuristic)
-if path:
-    print("Path found:", path)
-else:
-    print("No path found")
+def aStarAlgo(start_node, stop_node):
+         
+        open_set = set(start_node) 
+        closed_set = set()
+        g = {} #store distance from starting node
+        parents = {}# parents contains an adjacency map of all nodes
+ 
+        #ditance of starting node from itself is zero
+        g[start_node] = 0
+        #start_node is root node i.e it has no parent nodes
+        #so start_node is set to its own parent node
+        parents[start_node] = start_node
+         
+         
+        while len(open_set) > 0:
+            n = None
+ 
+            #node with lowest f() is found
+            for v in open_set:
+                if n == None or g[v] + heuristic(v) < g[n] + heuristic(n):
+                    n = v
+             
+                     
+            if n == stop_node or Graph_nodes[n] == None:
+                pass
+            else:
+                for (m, weight) in get_neighbors(n):
+                    #nodes 'm' not in first and last set are added to first
+                    #n is set its parent
+                    if m not in open_set and m not in closed_set:
+                        open_set.add(m)
+                        parents[m] = n
+                        g[m] = g[n] + weight
+                         
+     
+                    #for each node m,compare its distance from start i.e g(m) to the
+                    #from start through n node
+                    else:
+                        if g[m] > g[n] + weight:
+                            #update g(m)
+                            g[m] = g[n] + weight
+                            #change parent of m to n
+                            parents[m] = n
+                             
+                            #if m in closed set,remove and add to open
+                            if m in closed_set:
+                                closed_set.remove(m)
+                                open_set.add(m)
+ 
+            if n == None:
+                print('Path does not exist!')
+                return None
+ 
+            # if the current node is the stop_node
+            # then we begin reconstructin the path from it to the start_node
+            if n == stop_node:
+                path = []
+ 
+                while parents[n] != n:
+                    path.append(n)
+                    n = parents[n]
+ 
+                path.append(start_node)
+ 
+                path.reverse()
+ 
+                print('Path found: {}'.format(path))
+                return path
+ 
+ 
+            # remove n from the open_list, and add it to closed_list
+            # because all of his neighbors were inspected
+            open_set.remove(n)
+            closed_set.add(n)
+ 
+        print('Path does not exist!')
+        return None
+         
+#define fuction to return neighbor and its distance
+#from the passed node
+def get_neighbors(v):
+    if v in Graph_nodes:
+        return Graph_nodes[v]
+    else:
+        return None
+#for simplicity we ll consider heuristic distances given
+#and this function returns heuristic distance for all nodes
+def heuristic(n):
+        H_dist = {
+            'A': 11,
+            'B': 6,
+            'C': 99,
+            'D': 1,
+            'E': 7,
+            'G': 0,
+             
+        }
+ 
+        return H_dist[n]
+ 
+#Describe your graph here  
+Graph_nodes = {
+    'A': [('B', 2), ('E', 3)],
+    'B': [('C', 1),('G', 9)],
+    'C': None,
+    'E': [('D', 6)],
+    'D': [('G', 1)],
+     
+}
+aStarAlgo('A', 'G')
