@@ -1,0 +1,460 @@
+Practical 1
+
+import pandas as pd
+import numpy as np
+import random
+df=pd.read_csv('country_wise_latest.csv')
+df
+df.head()
+df.tail()
+df.tail()
+df.size
+df.shape
+df.isnull()
+df.isnull().sum()
+df.dtypes
+df.describe()
+df['1 week % increase']=df['1 week % increase'].astype('int64')
+df['WHO Region'].replace({'Eastern Mediterranean':'EM','Europe':'E','Africa':'A'},inplace=True)
+df
+ 
+-----------------------------------------------------------------------------------
+Practical 3
+
+import pandas as pd
+import numpy as np
+import random
+df=pd.read_csv("iris.csv")
+df
+df.info()
+df.describe()
+df.head(20)
+df.tail(20)
+df.columns
+df['species'].value_counts()
+df['petal-length'].mean()
+df['sepal-length'].mean()
+df['petal-length'].median()
+df['petal-length'].max()
+df['petal-length'].min()
+df['petal-length'].std()
+df.replace('Iris-virginica', '0', inplace=True)
+df.groupby('species').count()
+df.groupby('species').mean()
+df.groupby('species').median()
+df.groupby('species').quantile()
+df.groupby('species').quantile(0.75)
+
+----------------------------------------------------------------------------------
+Practical 5
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+dataframe = pd.read_csv('Social_Network_Ads.csv')
+dataframe
+X = dataframe.iloc[:, [2, 3]].values
+y = dataframe.iloc[:, 4].values
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+from sklearn.linear_model import LogisticRegression
+log_reg = LogisticRegression(random_state = 0)
+log_reg.fit(X_train, y_train)
+y_pred = log_reg.predict(X_test)
+y_pred
+y_test
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+cm
+TP=cm[1,1]
+TP
+FP=cm[0,1]
+FP
+TN=cm[0,0]
+TN
+FN=cm[1,0]
+FN
+#Recall Value
+R=TP/(TP+FN)
+R
+#Precision value
+P=TP/(FP+TP)
+P
+Accuracy=(TP+TN)/(TP+TN+FP+FN)
+Accuracy
+from sklearn.metrics import classification_report
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred)
+print(f'Accuracy: {accuracy}')
+print(f'Confusion Matrix:\n{conf_matrix}')
+print(f'Classification Report:\n{classification_rep}')
+
+---------------------------------------------------------------------------------
+Practical 7
+import pandas as pd
+import numpy as np
+ import nltk
+nltk.download("punkt")
+nltk.download("wordnet")
+nltk.word_tokenize('This is TE B1 batch')
+from nltk.tokenize import sent_tokenize
+text='This is pen. But look like a pencil'
+print(sent_tokenize(text))
+from nltk.corpus import stopwords
+stop_words=stopwords.words('english')
+print(stop_words)
+stop_word=stopwords.words('chinese')
+print(stop_word)
+from nltk.stem.snowball import SnowballStemmer
+snow_stemmer=SnowballStemmer(language='english')
+words=['Cared','University','Fairly','Easily','Singing','Sportingly','Shalmali','that']
+stem_words=[]
+for w in words:
+    x=snow_stemmer.stem(w)
+    stem_words.append(x)
+for e1,e2 in zip(words,stem_words):
+    print(e1+'='+e2)
+from nltk.stem.snowball import PorterStemmer
+porter_stemmer=PorterStemmer()
+word=['Cared','University','Fairly','Easily','Singing','Sportingly','Shalmali']
+port_words=[]
+for w in words:
+    x=porter_stemmer.stem(w)
+    port_words.append(x)
+for e1,e2 in zip(words,port_words):
+    print(e1+'='+e2)
+from nltk.stem import WordNetLemmatizer
+Lemmatizer=WordNetLemmatizer()
+input_str="been had done languages cities mice"
+input_str=nltk.word_tokenize(input_str)
+for word in input_str:
+    print(Lemmatizer.lemmatize(word))
+from nltk.tokenize import word_tokenize
+from nltk import pos_tag
+text="NLTK is powerful library"
+print(text)
+pos_tags = pos_tag(words)
+for word, pos_tag in pos_tags:
+    print(f"{word}: {pos_tag}")
+data=np.loadtxt('prct10.txt',dtype='str')
+data
+stem_words=[]
+for w in data:
+    x=snow_stemmer.stem(w)
+    stem_words.append(x)
+for e1,e2 in zip(data,stem_words):
+    print(e1+'='+e2)
+df=pd.read_csv('titanic (1).csv')
+df
+df['Name'][0]
+def Calculate_tf(term, document):
+    words = document.split()
+    term_frequency = words.count(term)
+    tf = term_frequency / len(words)
+    print(len(words))
+    print(term_frequency)        
+    return tf
+document = "This is a sample document to demonstrate term frequency calculation."
+term = "sample"
+tf = Calculate_tf(term, document)
+print(f"Term frequency of '{term}' in the document: {tf}")
+print(tf)
+from sklearn.feature_extraction.text import TfidfVectorizer
+vector=TfidfVectorizer()
+documents=["This is First document.", "This is Second document.","This is third document."]
+Vectorizer=TfidfVectorizer()
+tfidf_matrix=Vectorizer.fit_transform(documents)
+features_names=Vectorizer.get_feature_names_out()
+from sklearn.feature_extraction.text import TfidfVectorizer
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(documents)
+feature_names_out = vectorizer.get_feature_names_out()
+for i, doc in enumerate(documents):
+    print(f"Document {i}:")
+
+-----------------------------------------------------------------------------------
+Practical 9
+
+import pandas as pd
+import numpy as np
+import statistics
+df=pd.read_csv("titanic.csv")
+df
+df.head()
+df.tail()
+df.size
+df.shape
+df.isnull().sum()
+df.describe()
+df.info()
+df['Age'].fillna(0,inplace=True)
+df.info()
+df.isnull().sum()
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.boxplot(x='Sex',y='Age',data=df)
+sns.boxplot(x='Sex',y='Age',data=df,hue="Survived")
+
+--------------------------------Pratical No 2-------------
+import pandas as pd
+import numpy as np
+import random
+import statistics
+
+df=pd.read_csv("StudentsPerformance1.csv")
+df
+
+df.head() # It is used to print first five records
+
+df.tail() # It is used to print last five records
+
+
+df.info() #It returns the information about the dataframe
+
+df.shape #It returns the no of rows and columns
+
+df.size #It returns the overall size of an dataframe
+
+df.columns #Gives columns in a dataframe
+
+df.isnull().sum()
+
+df["reading score"]=df["reading score"].replace(np.NaN,df["reading score"].mean())
+#replacing NaN values by mean
+
+df["writing score"]=df["writing score"].replace(np.NaN,df["writing score"].median())
+df
+
+df.isnull().sum()
+
+
+df["math score"]=df["math score"].replace(np.NaN,statistics.mode(df["math score"]))
+df
+
+df.isnull().sum()
+
+#for using fill Na and drop Na we take another csv file
+df2=pd.read_csv("StudentsPerformance1.csv")
+df2
+
+df2.isnull().sum()
+
+df2.dropna(inplace=True)
+df2.isnull().sum()
+
+import scipy
+from scipy import stats
+
+z=np.abs(stats.zscore(df['math score']))
+z
+
+threshhold=0.00001
+#display outliers
+sample_outliers=np.where(z<threshhold)
+sample_outliers
+
+
+--------------------------------Pratical No 4-------------
+
+import pandas as pd
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+import statistics 
+import seaborn as sb
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+df=pd.read_csv("BostonHousing.csv")
+df1=df.head(50)
+
+x=df["age"]
+y=df["tax"]
+
+sb.scatterplot(x=x,y=y,data=df)
+plt.title("Scatter Plot")
+plt.xlabel("AGE")
+plt.ylabel("TAX")
+
+
+x=df[["age"]]
+y=df["tax"]
+
+x_test,x_train,y_test,y_train=train_test_split(x,y,test_size=0.25)
+
+regr=LinearRegression()
+
+regr.fit(x_train,y_train)
+
+y_pred=regr.predict(x_test)
+
+y_pred
+
+plt.hist(y_pred)
+
+y_test.head(10)
+x_test.head(10)
+
+y_pred[0:10]
+
+train_score=regr.score(x_train,y_train)
+train_score
+
+test_score=regr.score(x_test,y_test)
+test_score
+
+--------------------------------Pratical No 6-------------
+
+import pandas as pd
+df=pd.read_csv("IRIS - IRIS.csv")
+df['species'].unique()
+
+df['species'] = df['species'].replace({'Iris-setosa':0,'Iris-versicolor':1,'Iris-virginica':2})
+
+X = df.loc[:,['sepal-length','sepal-width','petal-length','petal-width']].values
+X
+
+Y = df['species'].values  
+Y
+
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test = train_test_split(X,Y,test_size = 0.25)
+y_test
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+
+
+x_train = sc.fit_transform(x_train)
+x_test = sc.fit_transform(x_test)
+x_test
+
+from sklearn.naive_bayes import GaussianNB
+gnb = GaussianNB()
+gnb.fit(x_train,y_train)
+pred = gnb.predict(x_test)
+pred
+
+y_test
+
+from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(y_test,pred)
+cm
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+cm_df = pd.DataFrame(cm,
+                     index = ['SETOSA','VERSICOLR','VIRGINICA'], 
+                     columns = ['SETOSA','VERSICOLR','VIRGINICA'])
+
+sns.heatmap(cm_df, annot=True)
+plt.title('Confusion Matrix')
+plt.ylabel('Actal Values')
+plt.xlabel('Predicted Values')
+plt.show()
+
+from sklearn.metrics import accuracy_score
+acc = accuracy_score(y_test, pred)   
+print(acc)
+
+from sklearn.metrics import classification_report
+cr = classification_report(y_test,pred)
+print(cr)
+
+
+--------------------------------Pratical No 8-------------
+
+#importing required libraries
+import pandas as pd
+import numpy as np
+import statistics
+import seaborn as sb
+import matplotlib.pyplot as plt
+
+df=pd.read_csv('titanic.csv')
+df.head(10)
+df['Survived'].value_counts()
+df.groupby('Survived').count()
+
+pclassscount=df.groupby('Pclass').count()
+pclassscount
+
+pclass=df['Pclass'].value_counts()
+myclass=['Third Class','Second Class','First Class']
+plt.pie(pclass,labels=myclass,autopct='%1.1f%%')
+
+df['Age'].notnull().sum()
+df['Age']=df['Age'].replace(np.NaN,df['Age'].mean())
+df['Age'].notnull().sum()
+
+var=df.groupby(['Sex','Pclass'])['Age'].mean()
+var
+
+x=df['Fare']
+y=df['Age']
+plt.hist(x)
+plt.hist(y)
+plt.xlabel("Fare")
+plt.ylabel("Age")
+
+fare=df[df['Fare'].notnull()]['Fare'].values
+
+fare_hist=np.histogram(fare,bins=[0,10,20,30,40,50,60,70,80,90])
+fare_hist_label=['0-10','10-20','20-30','30-40','40-50','50-60','60-70','70-80','80-90']
+plt.bar(fare_hist[0],fare_hist_label,width=10)
+
+--------------------------------Pratical No 10-------------
+
+import numpy as np
+import pandas as pd
+import random
+import seaborn as sb
+import matplotlib.pyplot as plt
+import statistics
+
+df=pd.read_csv("iris.csv")
+
+df.describe()
+df.columns
+list(df.columns.values)
+df.dtypes
+
+
+df.groupby('species').min()
+df.groupby('species').max()
+sb.boxplot(x='species',y='sepal_length',data=df)
+sb.boxplot(x='species',y='sepal_width',data=df)
+sb.boxplot(x='species',y='petal_length',data=df)
+sb.boxplot(x='species',y='petal_width',data=df)
+plt.hist(df['species'],edgecolor='black')
+plt.hist(df['sepal_length'],edgecolor='white')
+plt.hist(df['sepal_width'],edgecolor='white')
+plt.hist(df['petal_length'],edgecolor='white')
+plt.hist(df['petal_width'],edgecolor='white')
+plt.plot(df['species'],df['sepal_length'])
+plt.plot(df['sepal_length'])
+plt.plot(df['petal_length'])
+plt.plot(df['sepal_width'])
+plt.plot(df['petal_width'])
+df['sepal_length'].value_counts()
+df['petal_length'].value_counts()
+df['sepal_width'].value_counts()
+plt.figure(figsize=(15,5))
+sb.countplot(x='sepal_length',data=df)
+plt.figure(figsize=(15,5))
+sb.countplot(x='petal_length',data=df)
+
+plt.figure(figsize=(15,5))
+sb.countplot(x='sepal_width',data=df)
+plt.figure(figsize=(15,5))
+sb.countplot(x='petal_width',data=df)
+
+
